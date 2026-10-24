@@ -17,12 +17,10 @@ namespace Formative2_Part2.Controllers
             _context = context;
         }
 
-        [HttpPost("register")] // HttpPost attribute specifies that this action responds to POST requests at the route "api/auth/register"
+        [HttpPost("register")]
         public IActionResult Register(UserRegisterDto request)
         {
-      
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
-
 
             var newUser = new User
             {
@@ -33,12 +31,24 @@ namespace Formative2_Part2.Controllers
                 UserTypeId = request.UserTypeId
             };
 
-          
             _context.Users.Add(newUser);
             _context.SaveChanges();
 
-  
             return Ok("User registered successfully.");
+        }
+
+        [HttpPost("login")]
+        public IActionResult Login(UserLoginDto request)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Email == request.Email);
+
+            if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
+            {
+                return BadRequest("Invalid email or password.");
+            }
+
+            return Ok("Login successful.");
         }
     }
 }
+
