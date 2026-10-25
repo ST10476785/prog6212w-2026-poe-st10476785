@@ -38,7 +38,9 @@ namespace Formative2_Part2.Controllers
         {
             if (id != updatedUser.UserId) return BadRequest("Invalid request current details have remained unchanged");
             _context.Users.Update(updatedUser);
-            _context.SaveChanges();
+
+          _context.SaveChanges();
+
             return Ok("User details have been updated successfully.");
         }
 
