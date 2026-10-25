@@ -1,4 +1,5 @@
 ﻿namespace Formative2_Part2.DTOs
+// this is a DTO class for the whole authentication process whereby  user details are transferred between the client and server during registration and login
 {
     public class UserRegisterDto
     {
