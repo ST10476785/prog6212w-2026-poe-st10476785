@@ -1,33 +1,67 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Formative2_Part2.Data;
+using Formative2_Part2.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-namespace Formative2_Part2.Controllers
-//Event/Activity controller to handle CRUD operations and user interactions with events based on Part1's planning
+namespace Formative2_Part2.Controllers//Event/Activity controller to handle CRUD operations and user interactions with events based on Part1's planning
 {
-    [Route("api/activities")]
+    [Route("api/events")]
     [ApiController]
     public class ActivityController : ControllerBase
     {
-        [Authorize]// Lets all users who are logged in to view the catalog of events                    //(UserTyoe Context//)
-                                                                                                        // (UserTypeId 1 = Admin, UserTypeId 2 = User)
-        [HttpGet("catalog")]// Get all events in the catalog for a user that is authorized
-        public IActionResult ShowAllEvents()
+        private readonly ApplicationDBcontext _context;
+
+        public ActivityController(ApplicationDBcontext context)
         {
-            return Ok("showing all events.");
+            _context = context;
+        }
+
+        [Authorize]// Lets all users who are logged in to view the catalog of events                    //(UserTyoe Context//)
+                                                                                                   // (UserTypeId 1 = Admin, UserTypeId 2 = User)
+        [HttpGet]// Get all events in the catalog for a user that is authorized
+        public IActionResult ShowAllEvents()   //  / Route: GET /api/events
+        {
+            var events = _context.Events.ToList();
+            return Ok("showing all events."); // Restored your original text
         }
 
         [Authorize(Roles = "1")] // Add a new eent that can only be done by an admin user
-        [HttpPost("add-new-event")]
-        public IActionResult AddNewEvent()
+        [HttpPost]
+        public IActionResult AddNewEvent([FromBody] Event newEvent)  // // Route: POST /api/events
         {
-            return Ok("New event has been added.");
+            _context.Events.Add(newEvent);
+            _context.SaveChanges();
+            return StatusCode(201, "New event has been added."); 
+        }
+
+        [Authorize(Roles = "1")]
+        [HttpPut("{id}")]
+        public IActionResult UpdateEvent(int id, [FromBody] Event updatedEvent) // Route: PUT /api/events/{id}
+        {
+            if (id != updatedEvent.EventId) return BadRequest("ID mismatch.");
+            _context.Events.Update(updatedEvent);
+            _context.SaveChanges();
+            return Ok("Event updated successfully."); 
+        }
+
+        [Authorize(Roles = "1")]
+        [HttpDelete("{id}")]
+        public IActionResult DeleteEvent(int id) // Route: DELETE /api/events/{id}
+        {
+            var eventToDelete = _context.Events.Find(id);
+            if (eventToDelete == null) return NotFound("Event not found.");
+
+            _context.Events.Remove(eventToDelete);
+            _context.SaveChanges();
+            return NoContent(); // 
         }
 
         [Authorize(Roles = "2")] // allows a user to enroll and participate in an event
-        [HttpPost("participate-in-event")]
-        public IActionResult ParticipateInEvent()
+        [HttpPost("/api/enrolments")]
+        public IActionResult ParticipateInEvent([FromBody] EventEnrollment enrolment)
         {
-            return Ok("You have been enrolled in the event.");
+            _context.EventEnrollments.Add(enrolment);
+            _context.SaveChanges();
+            return StatusCode(201, "You have been enrolled in the event."); 
         }
     }
 }
