@@ -57,3 +57,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
+// REFERENCES
+//God,P (2023). .NET 7 WEB API 🔒 Create JSON Web Tokens (JWT) - User Registration / Login / Authentication. [video online] Available at <https://www.youtube.com/watch?v=UwruwHl3BlU> [Accessed 24 October 2026].
+

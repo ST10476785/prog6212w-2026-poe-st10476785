@@ -28,7 +28,7 @@ namespace Formative2_Part2.Controllers
         [HttpPost("register")]
         public IActionResult Register(UserRegisterDto request)
         {
-            string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);// using bcrypt to hash the password for security Patrick God (2023)
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);// using bcrypt to hash the password for security  God (2023)
 
             var newUser = new User
             { //The User entity values from  Users in the database are set to the values from the request DTO
