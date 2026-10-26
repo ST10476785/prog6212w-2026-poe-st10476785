@@ -58,5 +58,5 @@ app.UseAuthorization();
 app.MapControllers();
 app.Run();
 // REFERENCES
-//God,P (2023). .NET 7 WEB API 🔒 Create JSON Web Tokens (JWT) - User Registration / Login / Authentication. [video online] Available at <https://www.youtube.com/watch?v=UwruwHl3BlU> [Accessed 24 October 2026].
-
+//God,P, 2023 . .NET 7 WEB API 🔒 Create JSON Web Tokens (JWT) - User Registration / Login / Authentication. [video online] Available at <https://www.youtube.com/watch?v=UwruwHl3BlU> [Accessed 24 October 2026].
+//Saini,S, 2024. ASP.NET Web API CRUD Operations-.NET8 and Entity Framework Core Tutorial. [video online] Available at <https://www.youtube.com/watch?v=6YIRKBsRWVI&t=2009s>  [Accessed 22 October 2026].

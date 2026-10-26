@@ -7,7 +7,7 @@ namespace Formative2_Part2.Data
     {
         public ApplicationDBcontext(DbContextOptions<ApplicationDBcontext> options) : base(options)
         {
-        }
+        } //Dbsets for each entity in the system based on Part1's planning which i learnt from  Saini (2024)
         public DbSet<UserType> UserTypes { get; set; }
         public DbSet<User> Users { get; set; }
 
