@@ -1,5 +1,6 @@
 using Formative2_Part2.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -19,7 +20,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
-    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters // JWT token validation parameters
     {
         ValidateIssuer = true,
         ValidateAudience = true,
@@ -60,3 +61,5 @@ app.Run();
 // REFERENCES
 //God,P, 2023 . .NET 7 WEB API 🔒 Create JSON Web Tokens (JWT) - User Registration / Login / Authentication. [video online] Available at <https://www.youtube.com/watch?v=UwruwHl3BlU> [Accessed 24 October 2026].
 //Saini,S, 2024. ASP.NET Web API CRUD Operations-.NET8 and Entity Framework Core Tutorial. [video online] Available at <https://www.youtube.com/watch?v=6YIRKBsRWVI&t=2009s>  [Accessed 22 October 2026].
+//The Independent Institute of Education, 2025. The IIE Harvard Anglia Style Reference  Guide. [pdf] Available at<https://www.coursehero.com/file/247795947/The-IIE-Harvard> [Accessed 26 October 2026].
+
