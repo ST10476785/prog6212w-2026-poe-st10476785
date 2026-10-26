@@ -42,7 +42,7 @@ namespace Formative2_Part2.Testss
             var config = GetTestConfiguration();
             var controller = new AuthController(context, config);
 
-            var request = new UserRegisterDto
+            var request = new UserRegisterDto // Test values 
             {
                 Name = "Merlin",
                 Surname = "Test",
@@ -66,7 +66,7 @@ namespace Formative2_Part2.Testss
 
             var newEvent = new Event
             {
-                EventName = "5K Run",
+                EventName = "5K Run", // Event values for testing
                 Location = "Campus",
                 EventType = "Running", 
                 Distance = 5
@@ -95,7 +95,7 @@ namespace Formative2_Part2.Testss
             var context = GetInMemoryDbContext();
             var controller = new EnrollmentController(context); 
 
-            var enrollment = new EventEnrollment
+            var enrollment = new EventEnrollment // Enrollment Value Tests
             {
                 Status = "Registered", 
                 UserId = 1,
