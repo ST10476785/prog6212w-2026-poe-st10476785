@@ -2,56 +2,58 @@ using Formative2_Part2.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-
 
 builder.Services.AddDbContext<ApplicationDBcontext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("StandardConnection")));
 
-builder.Services.AddAuthentication (options =>
+builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme= JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
 }).AddJwtBearer(options =>
-{ options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
 {
-    ValidateIssuer = true,
-    ValidateAudience = true,
-    ValidateLifetime = true,
-    ValidateIssuerSigningKey = true,
-    ValidIssuer = builder.Configuration["Jwt:Issuer"],
-    ValidAudience = builder.Configuration["Jwt:Audience"],
-    IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-};
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
 });
 
-
-
+builder.Services.AddSwaggerDocument(config =>
+{
+    config.AddSecurity("Bearer", System.Linq.Enumerable.Empty<string>(), new NSwag.OpenApiSecurityScheme
+    {
+        Type = NSwag.OpenApiSecuritySchemeType.ApiKey,
+        Name = "Authorization",
+        In = NSwag.OpenApiSecurityApiKeyLocation.Header,
+        Description = "Enter 'Bearer' [space] and then your token"
+              });
+    config.OperationProcessors.Add(new NSwag.Generation.Processors.Security.AspNetCoreOperationSecurityScopeProcessor("Bearer"));
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseOpenApi();
+    app.UseSwaggerUi();
     app.MapOpenApi();
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 app.Run();

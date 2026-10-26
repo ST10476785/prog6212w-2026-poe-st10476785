@@ -18,6 +18,9 @@ namespace Formative2_Part2.Controllers
         }
 
         //POST METHOD
+        /// <summary>
+        /// Adds a new category to the catalog. Expects category details in the body. Returns a success message.
+        /// </summary>
         [Authorize(Roles = "1")] // Authorization whereby only an admin user can add a new category to the catalog of events
         [HttpPost] // Route: POST /api/category
         public IActionResult AddCategory(Category newCategory)
@@ -31,6 +34,9 @@ namespace Formative2_Part2.Controllers
         }
 
         //GET METHOD
+        /// <summary>
+        /// Retrieves all categories from the database and returns them as a list
+        /// </summary>
         [Authorize] // Makes sure only logged in users can view the categories
         [HttpGet] // Route: GET /api/category
         public IActionResult GetAllCategories() //Get/show al l categories in the catalog of events
@@ -46,6 +52,9 @@ namespace Formative2_Part2.Controllers
         }
 
         //GET METHOD (BY ID)
+        /// <summary>
+        /// Retrieves a specific category by its id
+        /// </summary>
         [Authorize]// Makes sure only logged in users can view the categories
         [HttpGet("{id}")]
         public IActionResult GetCategoryById(int id)
@@ -54,9 +63,12 @@ namespace Formative2_Part2.Controllers
             if (category == null) return NotFound("Category is not in the database");
 
             return Ok(category); // category found 
-        } 
+            }
 
         //PUT METHOD
+        /// <summary>
+        /// Updates an existing category using an existing category id and the new details
+        /// </summary>
         [Authorize(Roles = "1")]//Authorization whereby only an admin user can update a category in the catalog of events
         [HttpPut("{id}")]
         public IActionResult UpdateCategory(int id, [FromBody] Category updatedCategory) // Updates a category
@@ -76,6 +88,9 @@ namespace Formative2_Part2.Controllers
         }
 
         //DELETE METHOD
+        /// <summary>
+        /// Deletes a specific category by its id
+        /// </summary>
         [Authorize(Roles = "1")] // Authorization whereby only an admin user can delete a category from the catalog of events
         [HttpDelete("{id}")] // Route: DELETE /api/category/{id}
 

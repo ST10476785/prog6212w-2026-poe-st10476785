@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-
 namespace Formative2_Part2.Controllers
 {
     [Route("api/[controller]")]
@@ -23,6 +22,9 @@ namespace Formative2_Part2.Controllers
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Registers a new user. Expects user registration details in the body. Returns a success message.
+        /// </summary>
         [HttpPost("register")]
         public IActionResult Register(UserRegisterDto request)
         {
@@ -37,12 +39,15 @@ namespace Formative2_Part2.Controllers
                 UserTypeId = request.UserTypeId
             };
 
-            _context.Users.Add(newUser);// when a new user is added save changes to the database using the SaveChanges method of the database context
+            _context.Users.Add(newUser);// when a new user is added save changes to the database with the save method
             _context.SaveChanges();
 
             return Ok("User registered successfully.");
         }
 
+        /// <summary>
+        /// Authenticates a user and generates a JWT with login credentials that matches the stored registered user
+        /// </summary>
         [HttpPost("login")]
         public IActionResult Login(UserLoginDto request)
         {
@@ -59,7 +64,7 @@ namespace Formative2_Part2.Controllers
         private string CreateToken(User user) // Token creation method to generate a JWT token for the authenticated user
         {
             List<Claim> claims = new List<Claim>
-            {
+                      {
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.UserTypeId.ToString())
@@ -73,6 +78,7 @@ namespace Formative2_Part2.Controllers
             var token = new JwtSecurityToken(
                 issuer: _configuration.GetSection("Jwt:Issuer").Value,
                 audience: _configuration.GetSection("Jwt:Audience").Value,
+
                 claims: claims,
                 expires: DateTime.Now.AddDays(1),
                 signingCredentials: creds

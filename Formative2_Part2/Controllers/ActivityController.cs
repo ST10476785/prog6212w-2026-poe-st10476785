@@ -15,8 +15,11 @@ namespace Formative2_Part2.Controllers//Event/Activity controller to handle CRUD
             _context = context;
         }
 
+        /// <summary>
+        /// Retrieves all events from the catalog And returns them as a list
+        /// </summary>
         [Authorize]// Lets all users who are logged in to view the catalog of events                    //(UserTyoe Context//)
-                                                                                                 // (UserTypeId 1 = Admin, UserTypeId 2 = User)
+                   // (UserTypeId 1 = Admin, UserTypeId 2 = User)
         [HttpGet]// Get all events in the catalog for a user that is authorized
         public IActionResult ShowAllEvents()   //  / Route: GET /api/events
         {
@@ -27,6 +30,9 @@ namespace Formative2_Part2.Controllers//Event/Activity controller to handle CRUD
             return Ok(events);
         }
 
+        /// <summary>
+        /// Retrieves a specific event by its id
+        /// </summary>
         [Authorize] // Makes sure only logged in users can view specific events
         [HttpGet("{id}")]
         public IActionResult GetEventById(int id) // Get a specific event 
@@ -38,6 +44,9 @@ namespace Formative2_Part2.Controllers//Event/Activity controller to handle CRUD
             return Ok(singleEvent);
         }
 
+        /// <summary>
+        /// Adds a new event to the catalog with event details provided in the request body
+        /// </summary>
         [Authorize(Roles = "1")] // Add a new eent that can only be done by an admin user
         [HttpPost]
         public IActionResult AddNewEvent([FromBody] Event newEvent)  // // Route: POST /api/events
@@ -47,6 +56,9 @@ namespace Formative2_Part2.Controllers//Event/Activity controller to handle CRUD
             return StatusCode(201, "New event has been added.");
         }
 
+        /// <summary>
+        /// Updates an existing event. Expects the event ID and updated details in the body. Returns a success message.
+        /// </summary>
         [Authorize(Roles = "1")] //Makes sure only an admin user can update an event
         [HttpPut("{id}")]
         public IActionResult UpdateEvent(int id, [FromBody] Event updatedEvent) // Route: PUT /api/events/{id}
@@ -59,6 +71,9 @@ namespace Formative2_Part2.Controllers//Event/Activity controller to handle CRUD
             return Ok("Event updated successfully.");
         }
 
+        /// <summary>
+        /// Deletes a specific event by its id 
+        /// </summary>
         [Authorize(Roles = "1")] // Makes sure only an admin user can delete an event 
         [HttpDelete("{id}")]
         public IActionResult DeleteEvent(int id) // Route: DELETE /api/events/{id}

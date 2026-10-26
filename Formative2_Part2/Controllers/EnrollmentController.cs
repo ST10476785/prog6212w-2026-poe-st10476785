@@ -16,6 +16,9 @@ namespace Formative2_Part2.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// retrieves a specific enrollment by its id
+        /// </summary>
         [Authorize]
         [HttpGet("{id}")]
         public IActionResult GetEnrollmentById(int id) // Route: GET /api/enrollment/{id}
@@ -25,12 +28,15 @@ namespace Formative2_Part2.Controllers
             if (enrollment == null) return NotFound("Enrollment not found ");
 
             return Ok(enrollment);
-        }
+           }
 
+        /// <summary>
+        /// adds a new enrollment to the database with the event details provided in the request body
+        /// </summary>
         [Authorize]
         [HttpPost]
         public IActionResult AddNewEnrollment([FromBody] EventEnrollment newEnrollment)
-          {  
+        {
 
 
             _context.EventEnrollments.Add(newEnrollment);// adds a new enrollment to the database 
@@ -38,12 +44,15 @@ namespace Formative2_Part2.Controllers
             _context.SaveChanges();
 
             return StatusCode(201, "New enrollment has been added.");
-          }
+           }
 
+        /// <summary>
+        /// deletes an enrollment by its id
+        /// </summary>
         [Authorize]
         [HttpDelete("{id}")]
         public IActionResult DeleteEnrollment(int id)
-        {
+            {
             var enrollmentToDelete = _context.EventEnrollments.Find(id); // deletes an enrollment
 
             if (enrollmentToDelete == null) return NotFound("Enrollment not found.");
@@ -52,7 +61,7 @@ namespace Formative2_Part2.Controllers
 
             _context.SaveChanges();
 
-            return NoContent(); 
-        }
-    }
+            return NoContent();
+           }
+    } 
 }

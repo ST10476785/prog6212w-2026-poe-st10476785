@@ -20,7 +20,7 @@ namespace Formative2_Part2.Data
         public DbSet<Result> Results { get; set; }
 
 
-
+                     
 
 
     }
