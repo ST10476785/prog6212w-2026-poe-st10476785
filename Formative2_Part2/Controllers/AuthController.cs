@@ -28,6 +28,11 @@ namespace Formative2_Part2.Controllers
         [HttpPost("register")]
         public IActionResult Register(UserRegisterDto request)
         {
+            if (_context.Users.Any(u => u.Email == request.Email))//Added this incase an email used previously is used in swagger testing
+            {
+                return BadRequest("Email already taken");
+            }
+
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);// using bcrypt to hash the password for security  God (2023)
 
             var newUser = new User
