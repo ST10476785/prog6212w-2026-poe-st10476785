@@ -18,14 +18,14 @@ namespace Formative2_Part2.Controllers//Event/Activity controller to handle CRUD
         /// <summary>
         /// Retrieves all events from the catalog And returns them as a list
         /// </summary>
-        [Authorize]// Lets all users who are logged in to view the catalog of events                    //(UserTyoe Context//)
+        //[Authorize]// Lets all users who are logged in to view the catalog of events                    //(UserTyoe Context//)
                                                                                            // (UserTypeId 1 = Admin, UserTypeId 2 = User)
         [HttpGet]// Get all events in the catalog for a user that is authorized
         public IActionResult ShowAllEvents()   //  / Route: GET /api/events
         {
             var events = _context.Events.ToList();
 
-            if (!events.Any()) return NotFound("No events found.");
+          //  if (!events.Any()) return NotFound("No events found.");
 
             return Ok(events);
         }
