@@ -1,8 +1,152 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Home";
+    ViewData["FullWidth"] = true;
+    ViewData["HideNavbar"] = true;
+
+    var isLoggedIn = !string.IsNullOrEmpty(Context.Session.GetString("JWToken"));
+
+    var nextRaceName = "RaceDay City Challenge";
+    var nextRaceDate = "2027-03-14T06:00:00";
+    var nextRaceDistance = "109km";
+
+    var cards = new[]
+    {
+        new { Tag = "Events", Title = "Browse upcoming races & categories", Controller = "Activity_MVP_", Action = "Index", Label = "View events" },
+        new { Tag = "Enrollments", Title = "Lock in your spot on the start line", Controller = "Enrollment_MVC_", Action = "Create", Label = "Enrol now" },
+        new { Tag = "Results", Title = "Official finish times & leaderboards", Controller = "Result_MVC_", Action = "Index", Label = "See results" }
+    };
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="canva-hero-wrap">
+    <div class="canva-hero-stage">
+        <img src="@Url.Content("~/images/hero.png")" alt="RaceDay South Africa" class="canva-hero-img" />
+
+        <a asp-controller="Home" asp-action="Index" class="hotspot hs-home" title="Home"></a>
+        <a asp-controller="Activity_MVP_" asp-action="Index" class="hotspot hs-events" title="Events"></a>
+        <a asp-controller="Auth" asp-action="Register" class="hotspot hs-top-register" title="Register"></a>
+        <a asp-controller="Auth" asp-action="Login" class="hotspot hs-top-login" title="Login"></a>
+
+        <a asp-controller="Activity_MVP_" asp-action="Index" class="hotspot hs-browse" title="Browse Events"></a>
+        <a asp-controller="Auth" asp-action="Register" class="hotspot hs-create" title="Create Account"></a>
+    </div>
+</section>
+
+<section class="event-strip">
+    <div class="container">
+        <div class="row align-items-center gy-3 text-center text-md-start">
+            <div class="col-md-4">
+                <div class="strip-label">Event</div>
+                <div class="strip-value">@nextRaceName</div>
+            </div>
+            <div class="col-6 col-md-2">
+                <div class="strip-label">Distance</div>
+                <div class="strip-value">@nextRaceDistance</div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="strip-label">Starts in</div>
+                <div class="strip-value countdown" id="countdown" data-target="@nextRaceDate">--d : --h : --m : --s</div>
+            </div>
+            <div class="col-md-3 text-md-end">
+                @if (isLoggedIn)
+                {
+                    <a class="btn btn-accent me-1" asp-controller="Category_MVC_" asp-action="Index">Categories</a>
+                    <a class="btn btn-accent" asp-controller="Auth" asp-action="Logout">Logout</a>
+                }
+                else
+                {
+                    <a class="btn btn-accent" asp-controller="Enrollment_MVC_" asp-action="Create">Enter now</a>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="row g-4">
+            @foreach (var c in cards)
+            {
+                <div class="col-md-4">
+                    <article class="news-card">
+                        <div class="news-body">
+                            <small>@c.Tag</small>
+                            <h5>@c.Title</h5>
+                            <a class="link-accent" asp-controller="@c.Controller" asp-action="@c.Action">@c.Label</a>
+                        </div>
+                    </article>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="section section-alt">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <div class="split-img" style="background-image:url('@Url.Content("~/images/feature-1.jpg")')"></div>
+            </div>
+            <div class="col-lg-6">
+                <h6 class="eyebrow">About us</h6>
+                <h2>The ride of your life</h2>
+                <p class="mt-4">
+                    Built for road, trail, and city racers—browse upcoming events, pick your category, and lock
+                    in your spot on the start line without the hassle.
+                </p>
+                <a class="btn btn-accent" asp-controller="Activity_MVP_" asp-action="Index">Explore events</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6 order-lg-2">
+                <div class="split-img" style="background-image:url('@Url.Content("~/images/feature-2.jpg")')"></div>
+            </div>
+            <div class="col-lg-6 order-lg-1">
+                <h6 class="eyebrow">Track your progress</h6>
+                <h2>Results at your fingertips</h2>
+                <p class="mt-4">
+                    Log in to check your enrolments and race results. Admins can create events, manage
+                    categories, and record finishing times from one place.
+                </p>
+                <a class="btn btn-accent" asp-controller="Result_MVC_" asp-action="Index">View results</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-band" style="--cta-img:url('@Url.Content("~/images/cta.jpg")')">
+    <div class="container text-center">
+        <h2>Ready to line up at the start?</h2>
+        <p class="mt-4">Create a free account and enrol in your first event today.</p>
+        <a class="btn btn-accent btn-lg" asp-controller="Auth" asp-action="Register">Get started</a>
+    </div>
+</section>
+
+<script>
+    (function () {
+        const el = document.getElementById("countdown");
+        if (!el) return;
+        const target = new Date(el.dataset.target).getTime();
+
+        function tick() {
+            const diff = target - Date.now();
+            if (diff <= 0) {
+                el.textContent = "RACE DAY!";
+                return;
+            }
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const m = Math.floor((diff / (1000 * 60)) % 60);
+            const s = Math.floor((diff / 1000) % 60);
+            el.textContent = d + "d : " + String(h).padStart(2, "0") + "h : " + String(m).padStart(2, "0") + "m : " + String(s).padStart(2, "0") + "s";
+        }
+
+        tick();
+        setInterval(tick, 1000);
+    })();
+</script>

@@ -1,69 +1,121 @@
 ﻿@using Microsoft.AspNetCore.Http
+@{
+    var isFullWidth = ViewData["FullWidth"] as bool? == true;
+    var hideNavbar = ViewData["HideNavbar"] as bool? == true;
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - RaceDayMVC</title>
-    <script type="importmap"></script>
+    <title>@ViewData["Title"] - RaceDay</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/RaceDayMVC.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Activity_MVP_" asp-action="Index">RaceDayMVC</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Activity_MVP_" asp-action="Index">Events</a>
-                        </li>
-                        @if (!string.IsNullOrEmpty(Context.Session.GetString("JWToken")))
-                        {
+    @if (!hideNavbar)
+    {
+        <div class="topbar">
+            <div class="container d-flex justify-content-between align-items-center">
+                <span>OFFICIAL RACE MANAGEMENT &amp; RESULTS</span>
+                <div class="d-flex align-items-center gap-2">
+                    @if (!string.IsNullOrEmpty(Context.Session.GetString("JWToken")))
+                    {
+                        <a class="btn btn-sm text-white" asp-controller="Auth" asp-action="Logout">Logout</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Auth" asp-action="Login">Login</a>
+                        <span>/</span>
+                        <a asp-controller="Auth" asp-action="Register">Register</a>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-dark site-nav">
+                <div class="container">
+                    <a class="brand me-4" asp-controller="Home" asp-action="Index">RACE<span>DAY</span></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav me-auto">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Category_MVC_" asp-action="Index">Categories</a>
+                                <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Enrollment_MVC_" asp-action="Index">Enrollments</a>
+                                <a class="nav-link" asp-controller="Activity_MVP_" asp-action="Index">Events</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Result_MVC_" asp-action="Index">Results</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-danger" asp-area="" asp-controller="Auth" asp-action="Logout">Logout</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Login">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Register">Register</a>
-                            </li>
-                        }
+                            @if (!string.IsNullOrEmpty(Context.Session.GetString("JWToken")))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Category_MVC_" asp-action="Index">Categories</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Enrollment_MVC_" asp-action="Index">Enrollments</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Result_MVC_" asp-action="Index">Results</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+    }
+
+    @if (isFullWidth)
+    {
+        <main role="main">
+            @RenderBody()
+        </main>
+    }
+    else
+    {
+        <div class="container my-4">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    }
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-md-6">
+                    <h6>RaceDay</h6>
+                    <p class="mb-0">Race events, athlete enrolments, and live results tracking.</p>
+                </div>
+                <div class="col-md-3">
+                    <h6>Navigation</h6>
+                    <ul class="list-unstyled">
+                        <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a asp-controller="Activity_MVP_" asp-action="Index">Events</a></li>
+                        <li><a asp-controller="Result_MVC_" asp-action="Index">Results</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h6>Account</h6>
+                    <ul class="list-unstyled">
+                        <li><a asp-controller="Auth" asp-action="Login">Login</a></li>
+                        <li><a asp-controller="Auth" asp-action="Register">Register</a></li>
                     </ul>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - RaceDayMVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="footer-bottom text-center">
+                &copy; 2026 - RaceDay
+            </div>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
