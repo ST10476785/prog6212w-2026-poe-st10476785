@@ -22,7 +22,7 @@ namespace Formative2_Part2.Entities
         public required string PasswordHash { get; set; }
         public int UserTypeId { get; set; } // Foreign key to UserType
 
-        public UserType UserType { get; set; } // Foreign key relationship to UserType
+        public UserType? UserType { get; set; } // Foreign key relationship to UserType
 
 
 
@@ -34,7 +34,7 @@ namespace Formative2_Part2.Entities
         public int EventId { get; set; }
         public required string EventName { get; set; }
 
-        public string ?EventDescription { get; set; }
+        public string? EventDescription { get; set; }
 
         public DateTime? EventDate { get; set; }
 
@@ -44,7 +44,7 @@ namespace Formative2_Part2.Entities
 
         public required string EventType { get; set; }
 
-      
+
 
 
     }
@@ -55,11 +55,11 @@ namespace Formative2_Part2.Entities
         public int CategoryId { get; set; }
         public required string CategoryName { get; set; }
 
-        public string ? CategoryDescription { get; set; }
+        public string? CategoryDescription { get; set; }
 
         public int EventId { get; set; } // Foreign key to Event
 
-        public Event Event { get; set; } // Foreign key relationship to Event
+        public Event? Event { get; set; } // Foreign key relationship to Event
 
 
     }
@@ -69,16 +69,16 @@ namespace Formative2_Part2.Entities
         public int EventEnrollmentId { get; set; }
 
         public DateTime EnrollmentDate { get; set; } = DateTime.Now; // Default value for EnrollmentDate AS the current date
-        
-        public required string Status { get; set; } 
+
+        public required string Status { get; set; }
 
         public int UserId { get; set; } // Foreign key to User
 
-        public User User { get; set; } // Foreign key relationship to User
+        public User? User { get; set; } // Foreign key relationship to User
 
         public int CategoryId { get; set; } // Foreign key to Category
 
-        public Category Category { get; set; } // Foreign key relationship to Category
+        public Category? Category { get; set; } // Foreign key relationship to Category
 
 
 
@@ -90,18 +90,19 @@ namespace Formative2_Part2.Entities
 
     }
 
-    public class Result {
+    public class Result
+    {
 
         public int ResultId { get; set; }
-         public TimeOnly FinishingTime { get; set; } // TimeOnly property to represent the finishing time of a user in an event
+        public TimeOnly FinishingTime { get; set; } // TimeOnly property to represent the finishing time of a user in an event
 
-        public int FinishingPosition { get; set; } 
+        public int FinishingPosition { get; set; }
 
-        public DateTime ResultDate { get; set; } = DateTime.Now; 
+        public DateTime ResultDate { get; set; } = DateTime.Now;
 
         public int EventEnrollmentId { get; set; } // Foreign key to EventEnrollment
 
-        public EventEnrollment EventEnrollment { get; set; } // Foreign key relationship to EventEnrollment
+        public EventEnrollment? EventEnrollment { get; set; } // Foreign key relationship to EventEnrollment
 
 
 
@@ -110,13 +111,5 @@ namespace Formative2_Part2.Entities
 
 
     }
-        
-    }
 
-
-
-
-
-
-
-
+}

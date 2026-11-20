@@ -86,5 +86,7 @@ namespace RaceDayMVC.Controllers
 
             return role ?? "Participant";
         }
+
+
     }
 }
