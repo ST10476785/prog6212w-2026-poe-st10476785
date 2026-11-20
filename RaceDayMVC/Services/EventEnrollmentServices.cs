@@ -14,7 +14,7 @@ namespace RaceDayMVC.Services
             _httpClient = httpClient;
         }
 
-    
+
         public async Task<List<EventEnrollmentViewModel>> GetAllAsync(string token)//An asynchronous method that retrieves all event enrollments from the API using the provided JWT token for authorization
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -38,7 +38,7 @@ namespace RaceDayMVC.Services
 
         }
 
-        
+
         public async Task<string?> CreateAsync(EventEnrollmentViewModel model, string token) // an asynchronous method that creates a new event enrollment by sending a POST request to the API with the provided JWT token for authorization, and returns an error message if the creation fails
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -62,23 +62,24 @@ namespace RaceDayMVC.Services
 
 
 
-                   return "Status " + (int)response.StatusCode + ": " + errorDetails;
+            return "Status " + (int)response.StatusCode + ": " + errorDetails;
         }
 
-      
+
         public async Task<bool> DeleteAsync(int id, string token) // an asynchronous method that deletes an event enrollment by its ID by sending a DELETE request to the API with the provided Jwt token for authorization  and returns a boolean indicating whether the deletion was successful
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
 
-            var response = await _httpClient.DeleteAsync("enrollment/" + id);
+                var response = await _httpClient.DeleteAsync("enrollment/" + id);
 
 
-            return response.IsSuccessStatusCode;
+                return response.IsSuccessStatusCode;
 
+            }
         }
-    }
+      }
 }
