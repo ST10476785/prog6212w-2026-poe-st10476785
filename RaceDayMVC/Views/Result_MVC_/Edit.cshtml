@@ -1,0 +1,32 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model RaceDayMVC.Models.ResultViewModelcs
+@{
+    ViewData["Title"] = "Edit Result";
+}
+
+<h2>Edit Result</h2>
+
+<form asp-action="Edit" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="ResultId" />
+    <input type="hidden" asp-for="ResultDate" />
+    <div class="mb-3">
+        <label asp-for="EventEnrollmentId" class="form-label">Enrollment ID</label>
+        <input asp-for="EventEnrollmentId" type="number" class="form-control" />
+        <span asp-validation-for="EventEnrollmentId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="FinishingTime" class="form-label">Finishing Time</label>
+        <input asp-for="FinishingTime" type="time" step="1" class="form-control" />
+        <span asp-validation-for="FinishingTime" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="FinishingPosition" class="form-label">Finishing Position</label>
+        <input asp-for="FinishingPosition" type="number" class="form-control" />
+        <span asp-validation-for="FinishingPosition" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
