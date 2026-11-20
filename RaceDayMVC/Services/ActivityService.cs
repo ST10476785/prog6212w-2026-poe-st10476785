@@ -10,7 +10,7 @@ namespace RaceDayMVC.Services
         public ActivityService(HttpClient client)
         {
             _client = client;
-        }
+         }
 
         public async Task<List<ActivityViewModel>> GetAllAsync()
         {
