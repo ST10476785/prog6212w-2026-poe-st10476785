@@ -1,0 +1,43 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<RaceDayMVC.Models.EventEnrollmentViewModel>
+@{
+    ViewData["Title"] = "Enrollments";
+}
+
+<h2>Event Enrollments</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">New Enrollment</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>User ID</th>
+            <th>Category ID</th>
+            <th>Status</th>
+            <th>Enrollment Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.EventEnrollmentId</td>
+                <td>@item.UserId</td>
+                <td>@item.CategoryId</td>
+                <td>@item.Status</td>
+                <td>@item.EnrollmentDate.ToString("yyyy-MM-dd")</td>
+                <td>
+                    <form asp-action="Delete" asp-route-id="@item.EventEnrollmentId" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

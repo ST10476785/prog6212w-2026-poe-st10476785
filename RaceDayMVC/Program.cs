@@ -23,10 +23,14 @@ builder.Services.AddHttpClient<AuthenticationInterface, Authenticationcs>(client
     client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]!);
 });
 
-
 builder.Services.AddHttpClient<CategoryServices>(client => // setup for the category service to make HTTP requests to the API using the HttpClient class
 {
-    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]!); 
+    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]!);
+});
+
+builder.Services.AddHttpClient<EventEnrollmentService>(client => // setup for the event enrollment service to make HTTP requests to the API using the HttpClient class
+{
+    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]!);
 });
 
 var app = builder.Build();
