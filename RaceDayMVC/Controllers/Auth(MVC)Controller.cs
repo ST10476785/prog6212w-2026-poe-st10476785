@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using RaceDayMVC.Models;
 using RaceDayMVC.Services;
 
@@ -11,7 +13,7 @@ namespace RaceDayMVC.Controllers
         public AuthController(AuthenticationInterface authService)
         {
             _authService = authService;
-              }
+        }
 
         [HttpGet]
         public IActionResult Login()
@@ -35,8 +37,11 @@ namespace RaceDayMVC.Controllers
                 return View("LoginAuth", model); // return this error message to the user if the login attempt fails due to incorrect email or password
             }
 
+            var role = GetRoleFromToken(token);
+
             HttpContext.Session.SetString("JWToken", token);
             HttpContext.Session.SetString("UserEmail", model.Email);
+            HttpContext.Session.SetString("UserRole", role);
 
             return RedirectToAction("Index", "Home"); // return to the home page if the login attempt is successful
         }
@@ -72,5 +77,14 @@ namespace RaceDayMVC.Controllers
             HttpContext.Session.Clear();
             return RedirectToAction("Login"); // if a user logs out of the application the session is cleared and the user is redirected to the login page
         }
-                    }          
+
+        private string GetRoleFromToken(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jwt = handler.ReadJwtToken(token);
+            var role = jwt.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role || c.Type == "role")?.Value;
+
+            return role ?? "Participant";
+        }
+    }
 }

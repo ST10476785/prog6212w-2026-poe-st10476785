@@ -42,7 +42,7 @@ namespace RaceDayMVC.Services
                 return null;
             }
 
-            return json.Trim().Trim('"');
+            return json.Trim().Trim('"'); //trims the response string
         }
 
         public async Task<(bool Success, string Message)> RegisterAsync(RegisterViewModel registerData)

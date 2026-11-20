@@ -1,13 +1,22 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+@using Microsoft.AspNetCore.Http
 @model IEnumerable<RaceDayMVC.Models.ActivityViewModel>
 
 @{
     ViewData["Title"] = "Events";
+    var isAdmin = Context.Session.GetString("UserRole") == "1";
 }
 
 <h2>RaceDay Events</h2>
+
+@if (isAdmin)
+{
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Create New Event</a>
+    </p>
+}
 
 <table class="table table-striped table-bordered">
     <thead>
@@ -15,7 +24,13 @@
             <th>ID</th>
             <th>Event Name</th>
             <th>Date</th>
+            <th>Distance</th>
             <th>Location</th>
+            <th>Event Type</th>
+            @if (isAdmin)
+            {
+                <th>Actions</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -25,7 +40,19 @@
                 <td>@item.EventId</td>
                 <td>@item.EventName</td>
                 <td>@item.EventDate</td>
+                <td>@item.Distance</td>
                 <td>@item.Location</td>
+                <td>@item.EventType</td>
+                @if (isAdmin)
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.EventId" class="btn btn-sm btn-warning">Edit</a>
+
+                        <form asp-action="Delete" asp-route-id="@item.EventId" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this event?');">Delete</button>
+                        </form>
+                    </td>
+                }
             </tr>
         }
     </tbody>
